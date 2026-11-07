@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0b0d">
+<title>CinePlex — Movies & Series</title>
+<style>
+:root{--bg:#0b0b0d;--panel:#141417;--panel2:#1c1c21;--text:#f5f5f6;--muted:#9b9ba3;--accent:#ff5a1f;--blue:#438ee8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}.top{height:68px;background:#101013;border-bottom:1px solid #26262b;display:flex;align-items:center;justify-content:space-between;padding:0 max(4vw,18px);position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;font-size:25px;font-weight:800;letter-spacing:-1px}.logo{width:35px;height:35px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#ffb21b,#ff4d19);color:#111;font-weight:900}
+nav{display:flex;gap:22px}nav button,.plain{border:0;background:none;color:#ddd;padding:8px 0}nav button.active,nav button:hover{color:var(--accent)}
+.search{display:flex;gap:8px;align-items:center}.search input{width:min(25vw,250px);background:#222228;border:1px solid #36363d;color:white;border-radius:24px;padding:10px 15px;outline:none}
+.wrap{max-width:1250px;margin:auto;padding:24px 4vw 60px}
+.hero{min-height:330px;border-radius:13px;overflow:hidden;position:relative;display:flex;align-items:end;padding:30px;background:linear-gradient(90deg,rgba(0,0,0,.92),rgba(0,0,0,.35)),linear-gradient(135deg,#43251e,#182c42 55%,#111);margin-bottom:30px}
+.hero:after{content:"CINEPLEX";position:absolute;right:3%;top:15%;font-size:clamp(42px,10vw,120px);font-weight:900;color:#ffffff0b;letter-spacing:8px}
+.hero-content{position:relative;z-index:1;max-width:600px}.tag{display:inline-block;background:var(--blue);padding:4px 10px;border-radius:3px;font-size:12px;font-weight:700}.hero h1{font-size:clamp(30px,5vw,52px);line-height:1.08;margin:12px 0}.hero p{color:#d0d0d0;max-width:520px}.primary{border:0;background:var(--accent);color:white;font-weight:700;border-radius:4px;padding:11px 19px}.primary:hover{filter:brightness(1.12)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:26px 0 15px}.section-head h2{font-size:23px;margin:0;border-left:4px solid var(--blue);padding-left:12px}.filters{display:flex;gap:8px;flex-wrap:wrap}.chip{background:#1c1c21;border:1px solid #34343b;color:#ddd;padding:7px 13px;border-radius:20px}.chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}.card{min-width:0;cursor:pointer}.poster{height:250px;border-radius:6px;background:linear-gradient(145deg,#263b51,#15151b 65%);display:flex;align-items:end;padding:13px;position:relative;overflow:hidden;box-shadow:0 5px 16px #0008}.poster:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 25%,#ffffff26,transparent 35%),linear-gradient(0deg,#000c,transparent 65%)}
+.poster:after{content:"";position:absolute;left:12%;right:12%;top:17%;height:48%;border-radius:48% 48% 12% 12%;opacity:.72;background:radial-gradient(ellipse at 50% 28%,#f4d5a0 0 8%,transparent 9%),radial-gradient(ellipse at 50% 65%,#10131c 0 24%,transparent 25%);mix-blend-mode:screen}
+.poster .poster-title{display:none}.poster[style*="background-image"]:after{display:none}.poster[style*="background-image"]{background-color:#20232a}
+.poster-dune{background:radial-gradient(ellipse at 50% 55%,#d18a42 0 12%,transparent 13%),linear-gradient(160deg,#f1b76b,#9a4c27 48%,#17141a)}
+.poster-wednesday{background:radial-gradient(ellipse at 50% 35%,#d8d5d0 0 7%,transparent 8%),linear-gradient(145deg,#252b39,#10131b 55%,#4a263e)}
+.poster-batman{background:radial-gradient(ellipse at 52% 36%,#f6cf62 0 5%,transparent 6%),linear-gradient(155deg,#172b38,#10131a 55%,#8c2424)}
+.poster-stranger{background:radial-gradient(circle at 50% 35%,#e34a35 0 7%,transparent 8%),linear-gradient(160deg,#18233a,#351e37 60%,#9c392d)}
+.poster-interstellar{background:radial-gradient(circle at 50% 32%,#fff2ca 0 5%,transparent 6%),radial-gradient(ellipse at 50% 60%,#5da2b2,transparent 45%),linear-gradient(160deg,#071a2c,#10121c)}
+.poster-lastofus{background:radial-gradient(ellipse at 55% 35%,#b6c49b 0 7%,transparent 8%),linear-gradient(145deg,#52664c,#1d3028 55%,#111915)}
+.poster-spider{background:radial-gradient(circle at 50% 35%,#d52d35 0 10%,transparent 11%),linear-gradient(145deg,#1c4d83,#15213b 55%,#9b202b)}
+.poster-heist{background:radial-gradient(ellipse at 50% 34%,#d8b4a1 0 8%,transparent 9%),linear-gradient(145deg,#8b1e25,#3b1018 55%,#111)}
+.poster-topgun{background:radial-gradient(ellipse at 50% 40%,#e6d2a2 0 7%,transparent 8%),linear-gradient(160deg,#6d9cb5,#243e60 52%,#151c29)}
+
+.poster-generic{background:linear-gradient(145deg,#34465a,#171923 58%,#090a0d)!important}
+.card:nth-child(6n+1) .poster-generic{background:radial-gradient(circle at 70% 25%,#d77a3b,transparent 30%),linear-gradient(145deg,#583a2b,#14151c 65%)!important}
+.card:nth-child(6n+2) .poster-generic{background:radial-gradient(circle at 35% 28%,#8aa8c8,transparent 28%),linear-gradient(145deg,#243a54,#10131c 65%)!important}
+.card:nth-child(6n+3) .poster-generic{background:radial-gradient(circle at 65% 35%,#b64b55,transparent 25%),linear-gradient(145deg,#4b202b,#101015 65%)!important}
+.card:nth-child(6n+4) .poster-generic{background:radial-gradient(circle at 50% 35%,#9d9b75,transparent 25%),linear-gradient(145deg,#344737,#101512 65%)!important}
+.card:nth-child(6n+5) .poster-generic{background:radial-gradient(circle at 45% 30%,#8873b5,transparent 28%),linear-gradient(145deg,#35284f,#101018 65%)!important}
+.card:nth-child(6n) .poster-generic{background:radial-gradient(circle at 60% 30%,#b4a06a,transparent 25%),linear-gradient(145deg,#4c432d,#111114 65%)!important}
+.poster-witcher{background:radial-gradient(circle at 50% 30%,#d9d2bb 0 7%,transparent 8%),linear-gradient(145deg,#7d8a78,#28352e 50%,#111)}
+.poster .poster-title{position:relative;font-size:18px;font-weight:800;text-shadow:0 2px 4px #000}.ribbon{position:absolute;top:10px;left:0;background:#13b84b;color:white;padding:4px 10px;font-size:11px;font-weight:800;z-index:1}.meta{color:var(--muted);font-size:13px;margin-top:8px}.name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;margin-top:6px}
+.empty{padding:35px;text-align:center;color:var(--muted);background:var(--panel);border-radius:8px;grid-column:1/-1}
+footer{border-top:1px solid #29292e;color:var(--muted);text-align:center;padding:25px;font-size:13px}
+.modal{position:fixed;inset:0;background:#000d;display:none;place-items:center;padding:18px;z-index:10}.modal.show{display:grid}.dialog{width:min(850px,100%);max-height:92vh;overflow:auto;background:#151519;border:1px solid #34343b;border-radius:12px;padding:20px}.dialog-head{display:flex;justify-content:space-between;gap:12px}.close{background:#2a2a30;border:0;color:white;border-radius:50%;width:35px;height:35px}.player{aspect-ratio:16/9;background:#050505;border-radius:8px;overflow:hidden;margin:15px 0}.player iframe{width:100%;height:100%;border:0}.player video{width:100%;height:100%;background:#000}.admin{margin-top:38px;background:var(--panel);padding:18px;border-radius:10px}.admin summary{cursor:pointer;font-weight:700}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px}.formgrid input,.formgrid select{width:100%;background:#222228;border:1px solid #3b3b43;color:white;border-radius:5px;padding:10px}.formgrid .wide{grid-column:1/-1}.hint{font-size:12px;color:var(--muted)}
+@media(max-width:900px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.poster{height:220px}nav{gap:12px}}
+@media(max-width:650px){.top{height:auto;min-height:62px;flex-wrap:wrap;padding:12px 16px;gap:10px}.brand{font-size:22px}nav{order:3;width:100%;justify-content:space-between}.search{margin-left:auto}.search input{width:145px}.wrap{padding:16px 14px 40px}.hero{min-height:270px;padding:20px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.poster{height:175px;padding:9px}.poster .poster-title{font-size:14px}.name{font-size:13px}.meta{font-size:11px}.section-head h2{font-size:19px}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}}
+@media(max-width:390px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.poster{height:220px}.search input{width:125px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo">C</span><span>Cine<span style="color:var(--accent)">Plex</span></span></div>
+  <nav aria-label="Main navigation">
+    <button class="active" data-filter="All">Home</button><button data-filter="Movie">Movies</button><button data-filter="Series">TV Series</button><button data-filter="Trending">Trending</button>
+  </nav>
+  <div class="search"><input id="search" placeholder="Search titles..." aria-label="Search titles"></div>
+</header>
+<main class="wrap">
+  <section class="hero">
+    <div class="hero-content"><span class="tag">WELCOME TO CINEPLEX</span><h1>Movies & Series,<br>all in one place.</h1><p>Discover featured movies and series. Add your own licensed videos or authorized streaming embeds.</p><button class="primary" id="browse">EXPLORE NOW ▶</button></div>
+  </section>
+  <div class="section-head"><h2 id="sectionTitle">Latest Features</h2><div class="filters"><button class="chip active" data-sort="Latest">Latest</button><button class="chip" data-sort="Trending">Trending</button></div></div>
+  <div class="grid" id="catalog"></div>
+  <details class="admin">
+    <summary>Admin — Add a movie or series</summary>
+    <p class="hint">This starter includes a sample catalogue. The first featured titles have poster images; other sample titles need poster image URLs to show their official artwork. Entries added here save in this browser only. For a public multi-device admin system, connect a database/backend. Only add videos you own or are authorized to share.</p>
+    <form id="addForm" class="formgrid">
+      <input name="title" placeholder="Title" required>
+      <select name="type"><option>Movie</option><option>Series</option></select>
+      <input name="year" type="number" placeholder="Release year" min="1900" max="2100">
+      <input name="genre" placeholder="Genre (e.g. Action)">
+      <input name="poster" class="wide" placeholder="Poster image URL (optional)">
+      <input name="video" class="wide" placeholder="Authorized video URL (.mp4) or embed URL">
+      <button class="primary wide" type="submit">Add to website</button>
+    </form>
+  </details>
+</main>
+<footer>© <span id="yearNow"></span> CinePlex. Poster artwork belongs to its respective rights holders. Use content only with permission.</footer>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Title details">
+  <div class="dialog">
+    <div class="dialog-head"><div><span class="tag" id="detailType">MOVIE</span><h2 id="detailTitle">Title</h2><div class="meta" id="detailMeta"></div></div><button class="close" id="close" aria-label="Close">✕</button></div>
+    <div class="player" id="player"><div style="height:100%;display:grid;place-items:center;color:#aaa">Choose a title with a video link to play it here.</div></div>
+    <p id="detailGenre" class="meta"></p>
+  </div>
+</div>
+<script>
+const starter = [
+ {id:1,title:"Dune: Part Two",type:"Movie",year:2024,genre:"Sci-Fi · Adventure",featured:true,trending:true,poster:"https://m.media-amazon.com/images/M/MV5BNTc0YmQxMjEtODI5MC00NjFiLTlkMWUtOGQ5NjFmYWUyZGJhXkEyXkFqcGc%40._V1_.jpg",theme:"dune",video:""},
+ {id:2,title:"Wednesday",type:"Series",year:2022,genre:"Mystery · Fantasy",featured:true,trending:true,poster:"https://resizing.flixster.com/LumPRA7tw5a4VtKzSnGnTWpW2Q8%3D/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNTlmOGIyM2ItMzRhMy00MjdkLThkNDYtZWJkZDI1ODMzNmI3LmpwZw%3D%3D",theme:"wednesday",video:""},
+ {id:3,title:"The Batman",type:"Movie",year:2022,genre:"Action · Crime",featured:true,trending:true,poster:"https://resizing.flixster.com/HUwAlW1QAya1vlIePUDv3kdzhIE%3D/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzc1OGFlMDI0LTE1ZTEtNDE4ZS04Y2RmLWNjYzcyOWQyZmMyNi5qcGc%3D",theme:"batman",video:""},
+ {id:4,title:"Stranger Things",type:"Series",year:2016,genre:"Sci-Fi · Horror",featured:true,poster:"https://cdn.ananasposter.ru/image/cache/catalog/poster/film/89/4953-1000x830.jpg",theme:"stranger",video:""},
+ {id:5,title:"Interstellar",type:"Movie",year:2014,genre:"Sci-Fi · Drama",trending:true,poster:"https://cdn.mos.cms.futurecdn.net/xFQ8L37EP3ARaoFg8cQYCD.jpg",theme:"interstellar",video:""},
+ {id:6,title:"The Last of Us",type:"Series",year:2023,genre:"Drama · Thriller",poster:"https://static.cdn.turner.com/styles/scale_384/s3/2022-12/The%20Last%20of%20Us_Official%20Key%20Art.jpg?itok=EgFC73oD",theme:"lastofus",video:""},
+ {id:7,title:"Spider-Man: No Way Home",type:"Movie",year:2021,genre:"Action · Fantasy",poster:"https://www.televisa.com/_next/image?q=75&url=https%3A%2F%2Fst1.uvnimg.com%2F90%2Fd6%2F4bbc7684ef4a452e18fb9f0cdb67%2Fspider-man-no-way-home-poster-2.jpg&w=1280",theme:"spider",video:""},
+ {id:8,title:"Money Heist",type:"Series",year:2017,genre:"Crime · Thriller",poster:"https://www.tallengestore.com/cdn/shop/products/MoneyHeist4-NetflixTVShowPoster_7e0e76a3-ff28-4625-bc59-6ac24288a02c.jpg?v=1589268616",theme:"heist",video:""},
+ {id:9,title:"Top Gun: Maverick",type:"Movie",year:2022,genre:"Action · Drama",poster:"https://media.outnow.ch/Movies/News/2022/03/29/Top-Gun-Maverick-Finaler-Trailer-und-neues-Poster-zum-Blockbuster-mit-Tom-Cruise/f001.jpg",theme:"topgun",video:""},
+ {id:10,title:"The Witcher",type:"Series",year:2019,genre:"Fantasy · Action",poster:"https://imgix.bustle.com/inverse/9e/ec/ed/0e/7df8/472c/97b1/3b1a6ae045f6/yennefer-geralt-and-ciri-in-the-witcher-on-netflix.jpeg",theme:"witcher",video:""}
+];
+const moreTitles = [
+["Oppenheimer","Movie",2023,"Drama"],["Barbie","Movie",2023,"Comedy"],["Avatar: The Way of Water","Movie",2022,"Sci-Fi"],
+["John Wick: Chapter 4","Movie",2023,"Action"],["Mission: Impossible – Dead Reckoning","Movie",2023,"Action"],["Guardians of the Galaxy Vol. 3","Movie",2023,"Sci-Fi"],
+["Black Panther: Wakanda Forever","Movie",2022,"Action"],["Doctor Strange in the Multiverse of Madness","Movie",2022,"Fantasy"],["Thor: Love and Thunder","Movie",2022,"Action"],
+["Everything Everywhere All at Once","Movie",2022,"Sci-Fi"],["The Super Mario Bros. Movie","Movie",2023,"Animation"],["Wonka","Movie",2023,"Fantasy"],
+["The Hunger Games: The Ballad of Songbirds & Snakes","Movie",2023,"Adventure"],["Godzilla Minus One","Movie",2023,"Action"],["The Equalizer 3","Movie",2023,"Action"],
+["Extraction 2","Movie",2023,"Action"],["The Killer","Movie",2023,"Thriller"],["The Creator","Movie",2023,"Sci-Fi"],
+["Aquaman and the Lost Kingdom","Movie",2023,"Action"],["Fast X","Movie",2023,"Action"],["The Flash","Movie",2023,"Action"],
+["The Marvels","Movie",2023,"Action"],["Napoleon","Movie",2023,"Drama"],["Killers of the Flower Moon","Movie",2023,"Crime"],
+["The Menu","Movie",2022,"Thriller"],["Nope","Movie",2022,"Horror"],["Smile","Movie",2022,"Horror"],
+["Puss in Boots: The Last Wish","Movie",2022,"Animation"],["Bullet Train","Movie",2022,"Action"],["RRR","Movie",2022,"Action"],
+["K.G.F: Chapter 2","Movie",2022,"Action"],["Vikram","Movie",2022,"Action"],["Jawan","Movie",2023,"Action"],
+["Pathaan","Movie",2023,"Action"],["Animal","Movie",2023,"Action"],["12th Fail","Movie",2023,"Drama"],
+["The Gray Man","Movie",2022,"Action"],["Prey","Movie",2022,"Action"],["The Northman","Movie",2022,"Action"],
+["A Quiet Place Part II","Movie",2021,"Horror"],["Nobody","Movie",2021,"Action"],["The Suicide Squad","Movie",2021,"Action"],
+["Tenet","Movie",2020,"Sci-Fi"],["The Gentlemen","Movie",2019,"Crime"],["Knives Out","Movie",2019,"Mystery"],
+["Parasite","Movie",2019,"Thriller"],["Joker","Movie",2019,"Drama"],["Avengers: Endgame","Movie",2019,"Action"],
+["Inception","Movie",2010,"Sci-Fi"],["The Dark Knight","Movie",2008,"Action"],["The Shawshank Redemption","Movie",1994,"Drama"],
+["Breaking Bad","Series",2008,"Crime"],["Game of Thrones","Series",2011,"Fantasy"],["The Boys","Series",2019,"Action"],
+["The Mandalorian","Series",2019,"Sci-Fi"],["Loki","Series",2021,"Fantasy"],["The Queen's Gambit","Series",2020,"Drama"],
+["Dark","Series",2017,"Sci-Fi"],["Peaky Blinders","Series",2013,"Crime"],["Sherlock","Series",2010,"Mystery"],
+["The Walking Dead","Series",2010,"Horror"],["The Crown","Series",2016,"Drama"],["Vikings","Series",2013,"Action"],
+["House of the Dragon","Series",2022,"Fantasy"],["The Sandman","Series",2022,"Fantasy"],["Squid Game","Series",2021,"Thriller"],
+["All of Us Are Dead","Series",2022,"Horror"],["Alice in Borderland","Series",2020,"Thriller"],["The Night Agent","Series",2023,"Action"],
+["Reacher","Series",2022,"Action"],["Jack Ryan","Series",2018,"Action"],["The Lincoln Lawyer","Series",2022,"Drama"],
+["Manifest","Series",2018,"Mystery"],["You","Series",2018,"Thriller"],["Lucifer","Series",2016,"Fantasy"],
+["The Umbrella Academy","Series",2019,"Fantasy"],["The 100","Series",2014,"Sci-Fi"],["Lost","Series",2004,"Mystery"],
+["Prison Break","Series",2005,"Crime"],["The Office","Series",2005,"Comedy"],["Friends","Series",1994,"Comedy"],
+["Modern Family","Series",2009,"Comedy"],["The Last Kingdom","Series",2015,"History"],["The Witcher: Blood Origin","Series",2022,"Fantasy"],
+["House","Series",2004,"Drama"],["The Rookie","Series",2018,"Crime"],["Suits","Series",2011,"Drama"],
+["The Bear","Series",2022,"Drama"],["Severance","Series",2022,"Sci-Fi"],["Silo","Series",2023,"Sci-Fi"],
+["Foundation","Series",2021,"Sci-Fi"],["The Peripheral","Series",2022,"Sci-Fi"],["Wednesday: Season 2","Series",2025,"Mystery"],
+["One Piece","Series",2023,"Adventure"],["Blue Eye Samurai","Series",2023,"Animation"],["Beef","Series",2023,"Comedy"],
+["The Diplomat","Series",2023,"Drama"],["Bodies","Series",2023,"Mystery"],["Fool Me Once","Series",2024,"Thriller"],
+["3 Body Problem","Series",2024,"Sci-Fi"],["Fallout","Series",2024,"Sci-Fi"],["Shogun","Series",2024,"History"],
+["Baby Reindeer","Series",2024,"Drama"],["The Gentlemen","Series",2024,"Crime"],["House of the Dragon: Season 2","Series",2024,"Fantasy"]
+];
+const extraItems = moreTitles.map((t,i)=>({id:100+i,title:t[0],type:t[1],year:t[2],genre:t[3],theme:"dune",featured:false,video:""}));
+let items = [...starter, ...extraItems, ...JSON.parse(localStorage.getItem("cineplex-items")||"[]")];
+let filter="All", sort="Latest";
+const catalog=document.getElementById("catalog");
+function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function render(){
+ const q=document.getElementById("search").value.toLowerCase().trim();
+ let shown=items.filter(x=>(filter==="All"||filter==="Trending"||x.type===filter)&&(filter!=="Trending"||x.trending)&&(`${x.title} ${x.genre} ${x.year}`).toLowerCase().includes(q));
+ shown.sort((a,b)=>sort==="Trending"?Number(!!b.trending)-Number(!!a.trending):Number(!!b.featured)-Number(!!a.featured)||Number(b.year||0)-Number(a.year||0));
+ catalog.innerHTML=shown.length?shown.map(x=>`<article class="card" data-id="${x.id}" tabindex="0"><div class="poster poster-${safe(x.theme||(x.poster?"dune":"generic"))}" style="${x.poster?`background-image:linear-gradient(0deg,#000c,transparent 65%),url('${safe(x.poster)}');background-size:cover;background-position:center`:''}">${x.featured?'<span class="ribbon">FEATURED</span>':''}</div><div class="name">${safe(x.title)}</div><div class="meta">${safe(x.year||"—")} · ${safe(x.type)}</div></article>`).join(""):'<div class="empty">No titles found. Add a title in the Admin section below.</div>';
+ catalog.querySelectorAll(".card").forEach(el=>{el.addEventListener("click",()=>openItem(Number(el.dataset.id)));el.addEventListener("keydown",e=>{if(e.key==="Enter")openItem(Number(el.dataset.id));});});
+ document.getElementById("sectionTitle").textContent=filter==="All"?"Latest Features":filter==="Trending"?"Global Trending":filter==="Movie"?"Movies":"TV Series";
+}
+function openItem(id){
+ const x=items.find(v=>v.id===id);if(!x)return;
+ document.getElementById("detailType").textContent=x.type.toUpperCase();
+ document.getElementById("detailTitle").textContent=x.title;
+ document.getElementById("detailMeta").textContent=`${x.year||"Year unknown"} · ${x.type}`;
+ document.getElementById("detailGenre").textContent=x.genre||"";
+ const p=document.getElementById("player");p.innerHTML="";
+ if(x.video){
+   if(/\.(mp4|webm|ogg)(\?.*)?$/i.test(x.video)){const v=document.createElement("video");v.controls=true;v.src=x.video;v.playsInline=true;p.append(v);}
+   else {const f=document.createElement("iframe");f.src=x.video;f.allow="autoplay; encrypted-media; picture-in-picture; fullscreen";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";p.append(f);}
+ }else p.innerHTML='<div style="height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#aaa">No video has been added for this title yet.<br>Add an authorized MP4 or embed URL in the Admin section.</div>';
+ document.getElementById("modal").classList.add("show");
+}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.filter;render();}));
+document.querySelectorAll("[data-sort]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-sort]").forEach(x=>x.classList.remove("active"));b.classList.add("active");sort=b.dataset.sort;render();}));
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("browse").addEventListener("click",()=>document.getElementById("catalog").scrollIntoView({behavior:"smooth"}));
+document.getElementById("close").addEventListener("click",()=>document.getElementById("modal").classList.remove("show"));
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")e.currentTarget.classList.remove("show");});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("modal").classList.remove("show");});
+document.getElementById("addForm").addEventListener("submit",e=>{
+ e.preventDefault();const f=new FormData(e.currentTarget);
+ const x={id:Date.now(),title:f.get("title").trim(),type:f.get("type"),year:Number(f.get("year"))||"",genre:f.get("genre").trim(),poster:f.get("poster").trim(),video:f.get("video").trim(),featured:true};
+ items.push(x);localStorage.setItem("cineplex-items",JSON.stringify(items.filter(v=>!starter.some(s=>s.id===v.id))));
+ e.currentTarget.reset();filter="All";document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.filter==="All"));render();alert("Title added in this browser.");
+});
+document.getElementById("yearNow").textContent=new Date().getFullYear();render();
+</script>
+</body>
+</html>
